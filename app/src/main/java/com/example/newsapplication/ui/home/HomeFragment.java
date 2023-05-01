@@ -32,7 +32,7 @@ public class HomeFragment extends Fragment {
     private FragmentHomeBinding binding;
 
     private String newsSource = "bbc-news";
-    private String apiKey = "";
+    private String apiKey = "80eb8c43c5464f7b90f05e5fcdee58dd";
 
     private ListView listViewNews;
 
@@ -45,11 +45,7 @@ public class HomeFragment extends Fragment {
 
         swipeRefreshLayout = binding.swipeRefreshLayout;
 
-        // Set the OnRefreshListener on the SwipeRefreshLayout
-        swipeRefreshLayout.setOnRefreshListener(() -> {
-            // Refresh the data
-            fetchNews();
-        });
+        swipeRefreshLayout.setOnRefreshListener(() -> fetchNews());
 
         listViewNews = binding.listViewNewsList;
 
@@ -61,19 +57,17 @@ public class HomeFragment extends Fragment {
     private void fetchNews() {
         Call<NewsResponse> call = newsService.getTopHeadlines(newsSource, apiKey);
 
-        // Create a ProgressBar
         ProgressBar progressBar = new ProgressBar(getContext(), null, android.R.attr.progressBarStyleLarge);
         progressBar.setIndeterminate(true);
 
-        // Create a Dialog with the ProgressBar as the content view
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         builder.setView(progressBar);
         builder.setCancelable(false);
-        builder.setTitle("Fething news...");
+        builder.setTitle("Fetching news...");
         AlertDialog dialog = builder.create();
 
-        // Show the dialog
         dialog.show();
+
         call.enqueue(new Callback<NewsResponse>() {
             @Override
             public void onResponse(Call<NewsResponse> call, Response<NewsResponse> response) {
@@ -81,7 +75,6 @@ public class HomeFragment extends Fragment {
                     List<Article> listOfArticles = response.body().getArticles();
                     setNewsListAdapter(listOfArticles);
                     dialog.dismiss();
-                    // Notify the SwipeRefreshLayout that the refresh is complete
                     swipeRefreshLayout.setRefreshing(false);
                 } else {
                     // TODO handle error case

@@ -7,9 +7,11 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.newsapplication.R;
 import com.example.newsapplication.ui.news.Article;
+import com.example.newsapplication.util.DateFormatterUtil;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -43,7 +45,11 @@ public class NewsAdapter extends ArrayAdapter<Article> {
         Picasso.get().load(article.getUrlToImage()).into(imageViewNewsImage);
 
         TextView textVewNewsDate = itemView.findViewById(R.id.textVewNewsDate);
-        textVewNewsDate.setText(article.getPublishedAt());
+        textVewNewsDate.setText(DateFormatterUtil.format(article.getPublishedAt()));
+
+        itemView.setOnClickListener(view -> {
+            Toast.makeText(this.getContext(), "Clicked item:  " + article.getTitle(), Toast.LENGTH_SHORT).show();
+        });
 
         return itemView;
     }
