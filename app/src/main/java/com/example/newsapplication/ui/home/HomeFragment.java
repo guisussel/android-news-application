@@ -32,7 +32,7 @@ public class HomeFragment extends Fragment {
     private FragmentHomeBinding binding;
 
     private String newsSource = "bbc-news";
-    private String apiKey = "80eb8c43c5464f7b90f05e5fcdee58dd";
+    private String apiKey = "";
 
     private ListView listViewNews;
 
