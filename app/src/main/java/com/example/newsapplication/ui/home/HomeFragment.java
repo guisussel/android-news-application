@@ -45,28 +45,27 @@ public class HomeFragment extends Fragment {
 
         swipeRefreshLayout = binding.swipeRefreshLayout;
 
-        swipeRefreshLayout.setOnRefreshListener(() -> fetchNews());
+        swipeRefreshLayout.setOnRefreshListener(this::fetchNews);
 
         listViewNews = binding.listViewNewsList;
 
         fetchNews();
-
         return root;
     }
 
     private void fetchNews() {
         Call<NewsResponse> call = newsService.getTopHeadlines(newsSource, apiKey);
 
-        ProgressBar progressBar = new ProgressBar(getContext(), null, android.R.attr.progressBarStyleLarge);
-        progressBar.setIndeterminate(true);
-
-        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-        builder.setView(progressBar);
-        builder.setCancelable(false);
-        builder.setTitle("Fetching news...");
-        AlertDialog dialog = builder.create();
-
-        dialog.show();
+//        ProgressBar progressBar = new ProgressBar(getContext(), null, android.R.attr.progressBarStyleLarge);
+//        progressBar.setIndeterminate(true);
+//
+//        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+//        builder.setView(progressBar);
+//        builder.setCancelable(false);
+//        builder.setTitle("Fetching news...");
+//        AlertDialog dialog = builder.create();
+//
+//        dialog.show();
 
         call.enqueue(new Callback<NewsResponse>() {
             @Override
@@ -74,7 +73,7 @@ public class HomeFragment extends Fragment {
                 if (response.isSuccessful()) {
                     List<Article> listOfArticles = response.body().getArticles();
                     setNewsListAdapter(listOfArticles);
-                    dialog.dismiss();
+//                    dialog.dismiss();
                     swipeRefreshLayout.setRefreshing(false);
                 } else {
                     // TODO handle error case
@@ -84,8 +83,7 @@ public class HomeFragment extends Fragment {
             @Override
             public void onFailure(Call<NewsResponse> call, Throwable t) {
                 // TODO handle failed request
-                dialog.dismiss();
-                // Notify the SwipeRefreshLayout that the refresh is complete
+//                dialog.dismiss();
                 swipeRefreshLayout.setRefreshing(false);
             }
         });

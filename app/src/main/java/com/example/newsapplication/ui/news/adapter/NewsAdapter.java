@@ -1,6 +1,7 @@
 package com.example.newsapplication.ui.news.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.newsapplication.ArticleDetailsActivity;
 import com.example.newsapplication.R;
 import com.example.newsapplication.ui.news.Article;
 import com.example.newsapplication.util.DateFormatterUtil;
@@ -48,7 +50,10 @@ public class NewsAdapter extends ArrayAdapter<Article> {
         textVewNewsDate.setText(DateFormatterUtil.format(article.getPublishedAt()));
 
         itemView.setOnClickListener(view -> {
-            Toast.makeText(this.getContext(), "Clicked item:  " + article.getTitle(), Toast.LENGTH_SHORT).show();
+            Context context = view.getContext();
+            Intent intent = new Intent(context, ArticleDetailsActivity.class);
+            intent.putExtra("article", article);
+            context.startActivity(intent);
         });
 
         return itemView;

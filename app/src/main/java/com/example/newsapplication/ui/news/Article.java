@@ -1,6 +1,8 @@
 package com.example.newsapplication.ui.news;
 
-public class Article {
+import java.io.Serializable;
+
+public class Article implements Serializable {
     private String author;
     private String title;
     private String description;

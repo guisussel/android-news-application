@@ -2,5 +2,10 @@
     <string name="app_name">News Application</string>
     <string name="title_home">Home</string>
     <string name="title_dashboard">Dashboard</string>
-    <string name="title_notifications">Notifications</string>
+    <string name="title_saved">Saved</string>
+    <string name="read_more">Read more</string>
+    <string name="description">Description</string>
+    <string name="content">Content</string>
+    <string name="title">Title</string>
+    <string name="dd_mm_yy_hh_mm">DD/MM/YY HH:mm</string>
 </resources>
