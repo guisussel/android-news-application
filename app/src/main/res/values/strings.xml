@@ -8,4 +8,5 @@
     <string name="content">Content</string>
     <string name="title">Title</string>
     <string name="dd_mm_yy_hh_mm">DD/MM/YY HH:mm</string>
+    <string name="title_activity_splash_screen">SplashScreenActivity</string>
 </resources>
