@@ -1,11 +1,16 @@
 package com.example.newsapplication;
 
+import static androidx.biometric.BiometricManager.Authenticators.BIOMETRIC_STRONG;
+import static androidx.biometric.BiometricManager.Authenticators.DEVICE_CREDENTIAL;
+
+import androidx.biometric.BiometricManager;
+
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.WindowInsets;
 import android.view.WindowInsetsController;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.Toast;
 
@@ -25,9 +30,6 @@ public class SplashActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
 
-
-
-        // Make the activity full screen
         WindowInsetsController controller = getWindow().getInsetsController();
         if (controller != null) {
             controller.hide(WindowInsets.Type.statusBars() | WindowInsets.Type.navigationBars());
@@ -42,50 +44,80 @@ public class SplashActivity extends AppCompatActivity {
         buttonAuthenticate = findViewById(R.id.buttonAuthenticate);
         buttonAuthenticate.setVisibility(View.GONE);
 
+        checkForActiveBiometricsAndAuthenticate();
 
-        // Create a BiometricPrompt instance
-        biometricPrompt = new BiometricPrompt(this, new BiometricPrompt.AuthenticationCallback() {
-            @Override
-            public void onAuthenticationSucceeded(@NonNull BiometricPrompt.AuthenticationResult result) {
-                super.onAuthenticationSucceeded(result);
-                // Launch MainActivity on successful fingerprint authentication
-                Intent intent = new Intent(SplashActivity.this, MainActivity.class);
-                startActivity(intent);
-                finish();
-            }
+    }
 
-            @Override
-            public void onAuthenticationFailed() {
-                super.onAuthenticationFailed();
-                Toast.makeText(getApplicationContext(), "Authentication failed",
-                                Toast.LENGTH_SHORT)
-                        .show();
-                buttonAuthenticate.setVisibility(View.VISIBLE);
-            }
-                        @Override
-            public void onAuthenticationError(int errorCode,
-                                              @NonNull CharSequence errString) {
-                super.onAuthenticationError(errorCode, errString);
-                Toast.makeText(getApplicationContext(),
-                                "Authentication error: " + errString, Toast.LENGTH_SHORT)
-                        .show();
-                buttonAuthenticate.setVisibility(View.VISIBLE);
-            }
-        });
+    public void checkForActiveBiometricsAndAuthenticate() {
+        BiometricManager biometricManager = BiometricManager.from(this);
 
-        // Create a BiometricPrompt.PromptInfo instance
+        switch (biometricManager.canAuthenticate(BIOMETRIC_STRONG | DEVICE_CREDENTIAL)) {
+            case BiometricManager.BIOMETRIC_SUCCESS:
+                Log.d("NEWS_APP_BIOMETRY", "App can authenticate using biometrics.");
+                authenticateViaBiometrics();
+                break;
+            case BiometricManager.BIOMETRIC_ERROR_NO_HARDWARE:
+                Log.e("NEWS_APP_BIOMETRY", "No biometric features available on this device.");
+                startMainActivity();
+                break;
+            case BiometricManager.BIOMETRIC_ERROR_HW_UNAVAILABLE:
+                Log.e("NEWS_APP_BIOMETRY", "Biometric features are currently unavailable.");
+                startMainActivity();
+                break;
+            case BiometricManager.BIOMETRIC_ERROR_NONE_ENROLLED:
+                Log.e("NEWS_APP_BIOMETRY", "BIOMETRIC_ERROR_NONE_ENROLLED.");
+                startMainActivity();
+                break;
+        }
+    }
+
+    public void authenticateViaBiometrics() {
+
+        createBiometricPrompt();
+
         promptInfo = new BiometricPrompt.PromptInfo.Builder()
                 .setTitle("Authenticate to continue")
                 .setDescription("Please scan your fingerprint to continue")
                 .setNegativeButtonText("Cancel")
                 .build();
 
-        // Prompt the user for a fingerprint scan
         biometricPrompt.authenticate(promptInfo);
 
         buttonAuthenticate.setOnClickListener(view -> {
             biometricPrompt.authenticate(promptInfo);
         });
+
+    }
+
+    public void createBiometricPrompt() {
+        biometricPrompt = new BiometricPrompt(this, new BiometricPrompt.AuthenticationCallback() {
+            @Override
+            public void onAuthenticationSucceeded(@NonNull BiometricPrompt.AuthenticationResult result) {
+                super.onAuthenticationSucceeded(result);
+                startMainActivity();
+            }
+
+            @Override
+            public void onAuthenticationFailed() {
+                super.onAuthenticationFailed();
+                Toast.makeText(getApplicationContext(), "Authentication failed",
+                        Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onAuthenticationError(int errorCode, @NonNull CharSequence errString) {
+                super.onAuthenticationError(errorCode, errString);
+                Toast.makeText(getApplicationContext(), "Authentication error: " + errString,
+                        Toast.LENGTH_SHORT).show();
+                buttonAuthenticate.setVisibility(View.VISIBLE);
+            }
+        });
+    }
+
+    public void startMainActivity() {
+        Intent intent = new Intent(SplashActivity.this, MainActivity.class);
+        startActivity(intent);
+        finish();
     }
 
     @Override

@@ -50,6 +50,7 @@ public class HomeFragment extends Fragment {
         listViewNews = binding.listViewNewsList;
 
         fetchNews();
+
         return root;
     }
 
