@@ -107,7 +107,9 @@ public class SplashActivity extends AppCompatActivity {
             @Override
             public void onAuthenticationError(int errorCode, @NonNull CharSequence errString) {
                 super.onAuthenticationError(errorCode, errString);
-                Toast.makeText(getApplicationContext(), "Authentication error: " + errString,
+                Toast.makeText(getApplicationContext(), "Authentication error: "
+//                                + errString,
+                            + "please register a fingerprint to proceed or try again.",
                         Toast.LENGTH_SHORT).show();
                 buttonAuthenticate.setVisibility(View.VISIBLE);
             }
