@@ -1,14 +1,14 @@
-package com.example.newsapplication.ui.notifications;
+package com.example.newsapplication.ui.sources;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-public class NotificationsViewModel extends ViewModel {
+public class SourcesViewModel extends ViewModel {
 
     private final MutableLiveData<String> mText;
 
-    public NotificationsViewModel() {
+    public SourcesViewModel() {
         mText = new MutableLiveData<>();
         mText.setValue("This is notifications fragment");
     }
