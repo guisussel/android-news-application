@@ -10,4 +10,7 @@
     <string name="title_activity_splash_screen">SplashScreenActivity</string>
     <string name="unexpected_error_fetch_news">There was an unexpected error while loading the news list. \n\nYou can swipe this screen down to refresh or try again later.\n\n</string>
     <string name="error_401">Error code 401 Unauthorized</string>
+    <string name="select_news_source">Select a News source</string>
+    <string name="bbc_news">BBC NEWS</string>
+    <string name="cnn">CNN</string>
 </resources>
