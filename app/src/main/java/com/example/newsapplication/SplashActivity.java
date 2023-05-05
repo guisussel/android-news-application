@@ -43,7 +43,6 @@ public class SplashActivity extends AppCompatActivity {
         buttonAuthenticate.setVisibility(View.GONE);
 
         checkForActiveBiometricsAndAuthenticate();
-
     }
 
     public void checkForActiveBiometricsAndAuthenticate() {
@@ -56,15 +55,15 @@ public class SplashActivity extends AppCompatActivity {
                 break;
             case BiometricManager.BIOMETRIC_ERROR_NO_HARDWARE:
                 Log.e("NEWS_APP_BIOMETRY", "No biometric features available on this device.");
-                startMainActivity();
+                redirectToMainPage();
                 break;
             case BiometricManager.BIOMETRIC_ERROR_HW_UNAVAILABLE:
                 Log.e("NEWS_APP_BIOMETRY", "Biometric features are currently unavailable.");
-                startMainActivity();
+                redirectToMainPage();
                 break;
             case BiometricManager.BIOMETRIC_ERROR_NONE_ENROLLED:
                 Log.e("NEWS_APP_BIOMETRY", "BIOMETRIC_ERROR_NONE_ENROLLED.");
-                startMainActivity();
+                redirectToMainPage();
                 break;
         }
     }
@@ -92,7 +91,7 @@ public class SplashActivity extends AppCompatActivity {
             @Override
             public void onAuthenticationSucceeded(@NonNull BiometricPrompt.AuthenticationResult result) {
                 super.onAuthenticationSucceeded(result);
-                startMainActivity();
+                redirectToMainPage();
             }
 
             @Override
@@ -105,13 +104,13 @@ public class SplashActivity extends AppCompatActivity {
             public void onAuthenticationError(int errorCode, @NonNull CharSequence errString) {
                 super.onAuthenticationError(errorCode, errString);
                 if (errorCode == 11) { //fingerprint active but not enrolled
-                    startMainActivity();
+                    redirectToMainPage();
                 }
             }
         });
     }
 
-    public void startMainActivity() {
+    public void redirectToMainPage() {
         Intent intent = new Intent(SplashActivity.this, MainActivity.class);
         startActivity(intent);
         finish();
