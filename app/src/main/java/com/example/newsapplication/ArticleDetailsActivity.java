@@ -1,13 +1,13 @@
 package com.example.newsapplication;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.newsapplication.ui.news.Article;
 import com.example.newsapplication.util.DateFormatterUtil;
@@ -39,7 +39,11 @@ public class ArticleDetailsActivity extends AppCompatActivity {
             textViewNewsDescription.setText(article.getDescription());
 
             TextView textViewNewsContent = findViewById(R.id.textViewNewsContent);
-            textViewNewsContent.setText(article.getContent());
+            if (article.getContent().contains("[+")) {
+                textViewNewsContent.setText(article.getContent().substring(0, article.getContent().indexOf("[+")));
+            } else {
+                textViewNewsContent.setText(article.getContent());
+            }
 
             Button buttonReadMore = findViewById(R.id.buttonReadMore);
             buttonReadMore.setOnClickListener(view -> {

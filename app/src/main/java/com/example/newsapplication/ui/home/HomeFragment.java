@@ -1,22 +1,21 @@
 package com.example.newsapplication.ui.home;
 
-import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
-import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import com.example.newsapplication.R;
 import com.example.newsapplication.databinding.FragmentHomeBinding;
 import com.example.newsapplication.ui.news.Article;
-import com.example.newsapplication.ui.news.adapter.NewsAdapter;
 import com.example.newsapplication.ui.news.NewsResponse;
+import com.example.newsapplication.ui.news.adapter.NewsAdapter;
 import com.example.newsapplication.ui.news.service.NewsService;
 
 import java.util.List;
@@ -36,6 +35,8 @@ public class HomeFragment extends Fragment {
 
     private ListView listViewNews;
 
+    private TextView textViewErrorNote;
+
     NewsService newsService = new NewsService();
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -49,6 +50,8 @@ public class HomeFragment extends Fragment {
 
         listViewNews = binding.listViewNewsList;
 
+        textViewErrorNote = binding.textViewErrorNote;
+
         fetchNews();
 
         return root;
@@ -57,34 +60,27 @@ public class HomeFragment extends Fragment {
     private void fetchNews() {
         Call<NewsResponse> call = newsService.getTopHeadlines(newsSource, apiKey);
 
-//        ProgressBar progressBar = new ProgressBar(getContext(), null, android.R.attr.progressBarStyleLarge);
-//        progressBar.setIndeterminate(true);
-//
-//        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-//        builder.setView(progressBar);
-//        builder.setCancelable(false);
-//        builder.setTitle("Fetching news...");
-//        AlertDialog dialog = builder.create();
-//
-//        dialog.show();
-
         call.enqueue(new Callback<NewsResponse>() {
             @Override
             public void onResponse(Call<NewsResponse> call, Response<NewsResponse> response) {
-                if (response.isSuccessful()) {
+                if (response.isSuccessful() && response.code() == 200) {
                     List<Article> listOfArticles = response.body().getArticles();
                     setNewsListAdapter(listOfArticles);
-//                    dialog.dismiss();
                     swipeRefreshLayout.setRefreshing(false);
+                    textViewErrorNote.setVisibility(View.GONE);
                 } else {
-                    // TODO handle error case
+                    swipeRefreshLayout.setRefreshing(false);
+                    textViewErrorNote.setVisibility(View.VISIBLE);
+                    if (response.code() == 401) {
+                        textViewErrorNote.setText(R.string.unexpected_error_fetch_news);
+                        textViewErrorNote.append(getResources().getString(R.string.error_401));
+                    }
                 }
             }
 
             @Override
             public void onFailure(Call<NewsResponse> call, Throwable t) {
-                // TODO handle failed request
-//                dialog.dismiss();
+                textViewErrorNote.setVisibility(View.VISIBLE);
                 swipeRefreshLayout.setRefreshing(false);
             }
         });

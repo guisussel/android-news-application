@@ -3,8 +3,6 @@ package com.example.newsapplication;
 import static androidx.biometric.BiometricManager.Authenticators.BIOMETRIC_STRONG;
 import static androidx.biometric.BiometricManager.Authenticators.DEVICE_CREDENTIAL;
 
-import androidx.biometric.BiometricManager;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -12,10 +10,10 @@ import android.view.View;
 import android.view.WindowInsets;
 import android.view.WindowInsetsController;
 import android.widget.Button;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.biometric.BiometricManager;
 import androidx.biometric.BiometricPrompt;
 
 public class SplashActivity extends AppCompatActivity {
@@ -100,18 +98,15 @@ public class SplashActivity extends AppCompatActivity {
             @Override
             public void onAuthenticationFailed() {
                 super.onAuthenticationFailed();
-                Toast.makeText(getApplicationContext(), "Authentication failed",
-                        Toast.LENGTH_SHORT).show();
+                //wrong finder input - dealt by BiometricPrompt.PromptInfo.Builder()
             }
 
             @Override
             public void onAuthenticationError(int errorCode, @NonNull CharSequence errString) {
                 super.onAuthenticationError(errorCode, errString);
-                Toast.makeText(getApplicationContext(), "Authentication error: "
-//                                + errString,
-                            + "please register a fingerprint to proceed or try again.",
-                        Toast.LENGTH_SHORT).show();
-                buttonAuthenticate.setVisibility(View.VISIBLE);
+                if (errorCode == 11) { //fingerprint active but not enrolled
+                    startMainActivity();
+                }
             }
         });
     }
