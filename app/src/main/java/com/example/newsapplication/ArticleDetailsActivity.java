@@ -9,9 +9,12 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.newsapplication.singleton.NewsSource;
 import com.example.newsapplication.ui.news.Article;
 import com.example.newsapplication.util.DateFormatterUtil;
 import com.squareup.picasso.Picasso;
+
+import java.util.Locale;
 
 public class ArticleDetailsActivity extends AppCompatActivity {
 
@@ -24,7 +27,7 @@ public class ArticleDetailsActivity extends AppCompatActivity {
         if (bundle != null) {
             Article article = (Article) bundle.getSerializable("article");
 
-            setTitle(article.getAuthor());
+            setTitle(NewsSource.getInstance().getSource().toUpperCase(Locale.ROOT));
 
             ImageView imageViewNewsImage = findViewById(R.id.imageViewNewsImage);
             Picasso.get().load(article.getUrlToImage()).into(imageViewNewsImage);
@@ -39,10 +42,14 @@ public class ArticleDetailsActivity extends AppCompatActivity {
             textViewNewsDescription.setText(article.getDescription());
 
             TextView textViewNewsContent = findViewById(R.id.textViewNewsContent);
-            if (article.getContent().contains("[+")) {
-                textViewNewsContent.setText(article.getContent().substring(0, article.getContent().indexOf("[+")));
+            if (article.getContent() == null) {
+                textViewNewsContent.setText("");
             } else {
-                textViewNewsContent.setText(article.getContent());
+                if (article.getContent().contains("[+")) {
+                    textViewNewsContent.setText(article.getContent().substring(0, article.getContent().indexOf("[+")));
+                } else {
+                    textViewNewsContent.setText(article.getContent());
+                }
             }
 
             Button buttonReadMore = findViewById(R.id.buttonReadMore);

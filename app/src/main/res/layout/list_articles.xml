@@ -38,7 +38,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
         android:text="@string/dd_mm_yy_hh_mm"
-        android:textSize="10sp"
+        android:textSize="14sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textViewNewsTitle" />
 
