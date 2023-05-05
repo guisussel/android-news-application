@@ -20,8 +20,11 @@ import com.example.newsapplication.ui.news.NewsResponse;
 import com.example.newsapplication.ui.news.adapter.NewsAdapter;
 import com.example.newsapplication.ui.news.service.NewsService;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 import java.util.Locale;
+import java.util.Properties;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -34,7 +37,7 @@ public class HomeFragment extends Fragment {
     private FragmentHomeBinding binding;
 
     private String newsSource = NewsSource.getInstance().getSource();
-    private String apiKey = "80eb8c43c5464f7b90f05e5fcdee58dd";
+    private String apiKey;
 
     private ListView listViewNews;
 
@@ -61,6 +64,7 @@ public class HomeFragment extends Fragment {
     }
 
     private void fetchNews() {
+        apiKey = readApiKey();
         Call<NewsResponse> call = newsService.getTopHeadlines(newsSource, apiKey);
 
         call.enqueue(new Callback<NewsResponse>() {
@@ -92,6 +96,17 @@ public class HomeFragment extends Fragment {
     private void setNewsListAdapter(List<Article> articles) {
         NewsAdapter newsAdapter = new NewsAdapter(getContext(), articles);
         listViewNews.setAdapter(newsAdapter);
+    }
+
+    private String readApiKey() {
+        try (InputStream input = getActivity().getAssets().open("keys.properties")) {
+            Properties props = new Properties();
+            props.load(input);
+            return props.getProperty("API_KEY");
+        } catch (IOException ex) {
+            ex.printStackTrace();
+            return null;
+        }
     }
 
     @Override
