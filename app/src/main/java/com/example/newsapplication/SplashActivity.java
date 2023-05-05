@@ -16,6 +16,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.biometric.BiometricManager;
 import androidx.biometric.BiometricPrompt;
 
+import com.example.newsapplication.singleton.NewsSource;
+
 public class SplashActivity extends AppCompatActivity {
 
     private BiometricPrompt biometricPrompt;
@@ -112,6 +114,7 @@ public class SplashActivity extends AppCompatActivity {
 
     public void redirectToMainPage() {
         Intent intent = new Intent(SplashActivity.this, MainActivity.class);
+        NewsSource.getInstance().setSource("bbc-news"); //default source
         startActivity(intent);
         finish();
     }

@@ -13,6 +13,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.example.newsapplication.R;
 import com.example.newsapplication.databinding.FragmentHomeBinding;
+import com.example.newsapplication.singleton.NewsSource;
 import com.example.newsapplication.ui.news.Article;
 import com.example.newsapplication.ui.news.NewsResponse;
 import com.example.newsapplication.ui.news.adapter.NewsAdapter;
@@ -30,7 +31,7 @@ public class HomeFragment extends Fragment {
 
     private FragmentHomeBinding binding;
 
-    private String newsSource = "bbc-news";
+    private String newsSource = NewsSource.getInstance().getSource();
     private String apiKey = "80eb8c43c5464f7b90f05e5fcdee58dd";
 
     private ListView listViewNews;

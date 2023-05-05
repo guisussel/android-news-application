@@ -9,18 +9,18 @@
 
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/buttonBbcNews"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="BBC NEWS"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView"
+        app:layout_constraintTop_toBottomOf="@+id/textViewSelectSource"
         app:layout_constraintVertical_bias="0.2" />
 
     <Button
-        android:id="@+id/button2"
+        android:id="@+id/buttonCnnNews"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="64dp"
@@ -28,10 +28,10 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/button" />
+        app:layout_constraintTop_toBottomOf="@+id/buttonBbcNews" />
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/textViewSelectSource"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Select a News source"
